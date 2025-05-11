@@ -114,60 +114,128 @@ def update_kde_plot():
     kde_traces.append(trace)
     kde_storage.set(kde_traces)
 
-# KDE Plot
-@render_plotly
-def kde_plot():
-    fig = go.Figure()
-    col = input.selected_column()
-    for trace in kde_storage():
-        if trace["column"] == col:
-            label = f"{col} @ Time {trace['time'][0]}–{trace['time'][1]}"
-            fig.add_trace(go.Scatter(x=trace["x"], y=trace["y"], mode="lines", name=label))
-    fig.update_layout(
-        xaxis_title=col,
-        yaxis_title="Density",
-        title="KDE Distribution",
-        margin=dict(l=40, r=40, t=40, b=40),
-    )
-    return fig
+# # KDE Plot
+# @render_plotly
+# def kde_plot():
+#     fig = go.Figure()
+#     col = input.selected_column()
+#     for trace in kde_storage():
+#         if trace["column"] == col:
+#             label = f"{col} @ Time {trace['time'][0]}–{trace['time'][1]}"
+#             fig.add_trace(go.Scatter(x=trace["x"], y=trace["y"], mode="lines", name=label))
+#     fig.update_layout(
+#         xaxis_title=col,
+#         yaxis_title="Density",
+#         title="KDE Distribution",
+#         margin=dict(l=40, r=40, t=40, b=40),
+#     )
+#     return fig
 
-# Time Series Plot
-@render_plotly
-def time_series_plot():
-    df_m = filtered_metrics_data()
-    df_i = filtered_icontrol_data()
-    y_series = processed_column()
-    col = input.selected_column()
+# # Time Series Plot
+# @render_plotly
+# def time_series_plot():
+#     df_m = filtered_metrics_data()
+#     df_i = filtered_icontrol_data()
+#     y_series = processed_column()
+#     col = input.selected_column()
 
-    fig = go.Figure()
+#     fig = go.Figure()
 
-    if not df_i.empty and "Temperature" in df_i.columns:
-        fig.add_trace(go.Scatter(x=df_i["Time"], y=df_i["Temperature"], mode="lines", name="Temperature", yaxis="y2", line=dict(color="orange")))
+#     if not df_i.empty and "Temperature" in df_i.columns:
+#         fig.add_trace(go.Scatter(x=df_i["Time"], y=df_i["Temperature"], mode="lines", name="Temperature", yaxis="y2", line=dict(color="orange")))
 
-    if not df_i.empty and "Volume" in df_i.columns:
-        fig.add_trace(go.Scatter(x=df_i["Time"], y=df_i["Volume"], mode="lines", name="Volume", yaxis="y2", line=dict(color="green")))
+#     if not df_i.empty and "Volume" in df_i.columns:
+#         fig.add_trace(go.Scatter(x=df_i["Time"], y=df_i["Volume"], mode="lines", name="Volume", yaxis="y2", line=dict(color="green")))
 
-    if not df_m.empty and col in df_m.columns:
-        fig.add_trace(go.Scatter(x=df_m["Time"], y=y_series, mode="lines", name=f"{input.plot_type()} {col}", line=dict(color="blue")))
+#     if not df_m.empty and col in df_m.columns:
+#         fig.add_trace(go.Scatter(x=df_m["Time"], y=y_series, mode="lines", name=f"{input.plot_type()} {col}", line=dict(color="blue")))
 
-    fig.update_layout(
-        xaxis=dict(title="Time [hour]"),
-        yaxis=dict(title=col, titlefont=dict(color="blue"), tickfont=dict(color="blue"), domain=[0, 0.85]),
-        yaxis2=dict(title="Temperature / Volume", titlefont=dict(color="orange"), tickfont=dict(color="orange"), overlaying="y", side="right", anchor="free", position=0.86),
-        legend=dict(x=1.05, y=1, xanchor="left", yanchor="top", bgcolor="#E2E2E2", bordercolor="#FFFFFF", borderwidth=2),
-        margin=dict(l=50, r=180, t=50, b=50)
-    )
-    return fig
+#     fig.update_layout(
+#         xaxis=dict(title="Time [hour]"),
+#         yaxis=dict(title=col, titlefont=dict(color="blue"), tickfont=dict(color="blue"), domain=[0, 0.85]),
+#         yaxis2=dict(title="Temperature / Volume", titlefont=dict(color="orange"), tickfont=dict(color="orange"), overlaying="y", side="right", anchor="free", position=0.86),
+#         legend=dict(x=1.05, y=1, xanchor="left", yanchor="top", bgcolor="#E2E2E2", bordercolor="#FFFFFF", borderwidth=2),
+#         margin=dict(l=50, r=180, t=50, b=50)
+#     )
+#     return fig
 
-# Layout
+# Layout (Express style)
 with ui.layout_columns(col_widths=[12]):
     with ui.card(full_screen=True):
         ui.card_header("Time Series with Temperature and Volume")
-        ui.output_plot("time_series_plot")
+
+        @render_plotly
+        def time_series_plot():
+            df_m = filtered_metrics_data()
+            df_i = filtered_icontrol_data()
+            y_series = processed_column()
+            col = input.selected_column()
+
+            fig = go.Figure()
+            if not df_i.empty and "Temperature" in df_i.columns:
+                fig.add_trace(go.Scatter(
+                    x=df_i["Time"], y=df_i["Temperature"],
+                    mode="lines", name="Temperature",
+                    yaxis="y2", line=dict(color="orange")
+                ))
+            if not df_i.empty and "Volume" in df_i.columns:
+                fig.add_trace(go.Scatter(
+                    x=df_i["Time"], y=df_i["Volume"],
+                    mode="lines", name="Volume",
+                    yaxis="y2", line=dict(color="green")
+                ))
+            if not df_m.empty and col in df_m.columns:
+                fig.add_trace(go.Scatter(
+                    x=df_m["Time"], y=y_series,
+                    mode="lines", name=f"{input.plot_type()} {col}",
+                    line=dict(color="blue")
+                ))
+            fig.update_layout(
+                xaxis_title="Time [hour]",
+                yaxis=dict(
+                    title=col,
+                    domain=[0, 0.85],
+                    titlefont=dict(color="blue"),
+                    tickfont=dict(color="blue")
+                ),
+                yaxis2=dict(
+                    title="Temperature / Volume",
+                    overlaying="y",
+                    side="right",
+                    position=0.86,
+                    anchor="free",
+                    titlefont=dict(color="orange"),
+                    tickfont=dict(color="orange")
+                ),
+                margin=dict(l=50, r=180, t=50, b=50),
+                legend=dict(x=1.05, y=1, xanchor="left", yanchor="top")
+            )
+            return fig
 
     with ui.card(full_screen=True):
         ui.card_header("KDE Distribution of Selected Metric")
-        ui.output_plot("kde_plot")
+
+        @render_plotly
+        def kde_plot():
+            traces = kde_storage()
+            col = input.selected_column()
+            fig = go.Figure()
+            for trace in traces:
+                if trace["column"] == col:
+                    label = f"{col} @ Time {trace['time'][0]}–{trace['time'][1]}"
+                    fig.add_trace(go.Scatter(
+                        x=trace["x"], y=trace["y"],
+                        mode="lines", name=label
+                    ))
+            fig.update_layout(
+                title="KDE Distribution",
+                xaxis_title=col,
+                yaxis_title="Density",
+                margin=dict(l=40, r=40, t=40, b=40)
+            )
+            return fig
+
+
 
 # App declaration
 app = App(ui.page(), server=None)
