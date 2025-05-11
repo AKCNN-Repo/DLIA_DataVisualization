@@ -4,8 +4,8 @@ import numpy as np
 import plotly.graph_objs as go
 from scipy.stats import gaussian_kde
 
-from shiny import App, reactive, render, ui
-from shiny.express import input
+from shiny import App, reactive, render
+from shiny.express import input, ui
 from shinywidgets import render_plotly
 
 # Reactive storage
