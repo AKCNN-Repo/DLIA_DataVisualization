@@ -1,0 +1,55 @@
+/* styles.css - base styles already defined above */
+
+/* Light theme variables (default) */
+:root {
+  --color-bg: #ffffff;
+  --color-sidebar-bg: #f5f5f5;
+  --color-card-bg: #ffffff;
+  --color-primary: #005f99;
+  --color-header-bg: #eef6fb;
+  --color-text: #000000;
+}
+
+/* Dark theme overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1e1e1e;
+    --color-sidebar-bg: #2b2b2b;
+    --color-card-bg: #2e2e2e;
+    --color-primary: #4db2ff;
+    --color-header-bg: #333333;
+    --color-text: #f0f0f0;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .card {
+    background-color: var(--color-card-bg);
+    color: var(--color-text);
+    border-color: #444;
+  }
+
+  .card-header {
+    background-color: var(--color-header-bg);
+    color: var(--color-text);
+  }
+
+  .sidebar {
+    background-color: var(--color-sidebar-bg);
+    border-color: #444;
+  }
+
+  .popover {
+    --bs-popover-header-bg: #444;
+    --bs-popover-header-color: #fff;
+  }
+
+  .btn {
+    color: #fff;
+    background-color: var(--color-primary);
+    border: none;
+  }
+}

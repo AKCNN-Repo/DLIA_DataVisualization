@@ -1,0 +1,6 @@
+shiny>=0.7.0
+shinywidgets>=0.2.2
+plotly>=5.18
+pandas>=1.5
+numpy>=1.22
+scipy>=1.10

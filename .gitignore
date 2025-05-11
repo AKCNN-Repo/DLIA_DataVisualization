@@ -1,0 +1,45 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Jupyter and IPython
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Shiny/Python cache and logs
+.shiny/
+.shiny_logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment and dependencies
+.env
+*.env
+*.venv/
+.venv/
+env/
+venv/
+pip-log.txt
+
+# Data and uploads
+*.csv
+*.xlsx
+*.h5
+*.pkl
+*.model
+*.joblib
+*.sav
+
+# Tkinter UI remnants (if any)
+*.tkinter
+
+# Mac/Linux hidden files
+*.swp
