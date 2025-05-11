@@ -238,4 +238,4 @@ with ui.layout_columns(col_widths=[12]):
 
 
 # App declaration
-app = App(ui.page(), server=None)
+# app = App(, server=None)
